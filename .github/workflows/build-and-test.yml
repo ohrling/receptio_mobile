@@ -50,6 +50,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - name: Analyze and Test
-        run: |
-          ./tool/ci.sh
+      - run: flutter pub get
+      - run: flutter build apk
+      - run: flutter analyze
+      - run: flutter test
