@@ -1,0 +1,55 @@
+name: build-and-test
+
+on: [push]
+
+jobs:
+  # Set up Flutter for all other tasks.
+  setup:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ matrix.flutter_path }}
+          key: ${{ runner.os }}-flutter
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+
+  # Analyze and test.
+  analyze-and-test:
+    runs-on: ${{ matrix.os }}
+    needs: setup
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache Flutter
+        id: cache-flutter
+        uses: actions/cache@v1
+        with:
+          path: ${{ matrix.flutter_path }}
+          key: ${{ runner.os }}-flutter
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test

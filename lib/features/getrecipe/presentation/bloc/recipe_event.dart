@@ -5,3 +5,9 @@ import 'package:meta/meta.dart';
 abstract class RecipeEvent extends Equatable {
   RecipeEvent([List props = const <dynamic>[]]) : super(props);
 }
+
+class GetRecipeById extends RecipeEvent {
+  final String idString;
+
+  GetRecipeById(this.idString) : super([idString]);
+}
