@@ -30,6 +30,18 @@ void main() {
     expect(bloc.initialState, equals(Empty()));
   });
 
+  group('RecipeBloc constructor', () {
+    test('should assert if GetRecipe is null', () {
+      expect(
+          () => RecipeBloc(getRecipe: null, inputConverter: mockInputConverter),
+          throwsA(isAssertionError));
+    });
+    test('should assert if inputConverter is null', () {
+      expect(() => RecipeBloc(getRecipe: mockGetRecipe, inputConverter: null),
+          throwsA(isAssertionError));
+    });
+  });
+
   group('GetRecipe', () {
     final tIdString = 'd290f1ee-6c54-4b01-90e6-d701748f0851';
     final tIdParsed = Uuid('d290f1ee-6c54-4b01-90e6-d701748f0851');
