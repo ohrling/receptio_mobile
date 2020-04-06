@@ -1,15 +1,14 @@
-import 'package:better_uuid/uuid.dart';
 import 'package:dartz/dartz.dart';
 import 'package:receptio_mobile/core/error/failures.dart';
 
 class InputConverter {
-  Either<Failure, Uuid> stringToUuid(String str) {
+  Either<Failure, int> stringToInteger(String str) {
     try {
-      if (str.length < 32) {
+      final id = int.parse(str);
+      if (id < 1) {
         throw FormatException();
       } else {
-        final uuid = Uuid(str);
-        return Right(uuid);
+        return Right(id);
       }
     } on Exception {
       return Left(InvalidInputFailure());

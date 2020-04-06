@@ -1,4 +1,3 @@
-import 'package:better_uuid/uuid.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:receptio_mobile/core/error/exceptions.dart';
@@ -20,7 +19,7 @@ class RecipeRepositoryImpl implements RecipeRepository {
       @required this.networkInfo});
 
   @override
-  Future<Either<Failure, Recipe>> getRecipe(Uuid id) async {
+  Future<Either<Failure, Recipe>> getRecipe(int id) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteRecipe = await remoteDataSource.getRecipe(id);

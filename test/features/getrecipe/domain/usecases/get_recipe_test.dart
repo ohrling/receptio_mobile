@@ -1,4 +1,3 @@
-import 'package:better_uuid/uuid.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -18,7 +17,7 @@ void main() {
     useCase = GetRecipe(mockGetRecipesRepository);
   });
 
-  final tId = Uuid('d290f1ee-6c54-4b01-90e6-d701748f0851');
+  final tId = 1;
   final tName = 'Chicago Deep-dish Pizza';
   final tDescription =
       'Classic chicago deep dish pizza with lots of pepperoni!';
@@ -26,7 +25,27 @@ void main() {
   final tServings = 4;
   final tInstructions =
       'Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.';
-  final tIngredients = ['Cheese', 'Pepperoni', 'Tomato sauce'];
+  final tIngredients = [
+    '''
+    {
+      "id": "45",
+      "name": "Cheese",
+      "measurementType": "grams",
+      "image": "/"
+    }''',
+    '''{
+      "id": "986",
+      "name": "Pepperoni",
+      "measurementType": "grams",
+      "image": "/"
+    }''',
+    '''{
+      "id": "983",
+      "name": "Tomato sauce",
+      "measurementType": "grams",
+      "image": "/"
+    }'''
+  ];
   final tImage = '/images/pizza.jpg';
   final tSource = 'John Doe';
   final tRecipe = Recipe(

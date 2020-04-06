@@ -1,4 +1,3 @@
-import 'package:better_uuid/uuid.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -53,7 +52,7 @@ void main() {
     });
   }
 
-  final tId = Uuid('d290f1ee-6c54-4b01-90e6-d701748f0851');
+  final tId = 1;
   final tRecipeModel = RecipeModel(
       id: tId,
       name: 'Chicago Deep-dish Pizza',

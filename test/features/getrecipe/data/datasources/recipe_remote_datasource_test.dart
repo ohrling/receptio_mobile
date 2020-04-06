@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:better_uuid/uuid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
@@ -15,7 +14,7 @@ void main() {
   MockHttpClient mockHttpClient;
   String _tJsonRecipe = '''
   {
-    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+    "id": 1,
     "name": "Chicago Deep-dish Pizza",
     "description": "Classic chicago deep dish pizza with lots of pepperoni!",
     "cookingTime": 90,
@@ -44,7 +43,7 @@ void main() {
   }
 
   group('getRecipe', () {
-    final tId = Uuid.v4();
+    final tId = 1;
     final tRecipe = RecipeModel.fromJson(json.decode(_tJsonRecipe));
 
     test('should perform a GET request on a URL with id being the endpoint',
@@ -54,8 +53,7 @@ void main() {
       // act
       dataSource.getRecipe(tId);
       // assert
-      verify(mockHttpClient
-          .get('http://receptio.herokuapp.com/api/recipe/?recipeId=$tId'));
+      verify(mockHttpClient.get('http://receptio.herokuapp.com/recipe/$tId'));
     });
 
     test('should return Recipe when the response is 200', () async {

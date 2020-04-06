@@ -1,10 +1,9 @@
-import 'package:better_uuid/uuid.dart';
 import 'package:meta/meta.dart';
 import 'package:receptio_mobile/features/getrecipe/domain/entities/recipe.dart';
 
 class RecipeModel extends Recipe {
   RecipeModel(
-      {@required Uuid id,
+      {@required int id,
       @required String name,
       @required String description,
       @required int cookingTime,
@@ -26,7 +25,7 @@ class RecipeModel extends Recipe {
 
   factory RecipeModel.fromJson(Map<String, dynamic> json) {
     return RecipeModel(
-        id: Uuid(json['id']),
+        id: json['id'],
         name: json['name'],
         description: json['description'],
         cookingTime: json['cookingTime'],
@@ -39,7 +38,7 @@ class RecipeModel extends Recipe {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id.toString(),
+      'id': id,
       'name': name,
       'description': description,
       'cookingTime': cookingTime,

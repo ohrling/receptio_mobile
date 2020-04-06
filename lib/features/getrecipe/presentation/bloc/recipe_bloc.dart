@@ -30,14 +30,14 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     RecipeEvent event,
   ) async* {
     if (event is GetRecipeById) {
-      final inputEither = inputConverter.stringToUuid(event.idString);
+      final inputEither = inputConverter.stringToInteger(event.idString);
       yield* inputEither.fold(
         (failure) async* {
           yield Error(errorMessage: INVALID_INPUT_FAILURE_MESSAGE);
         },
-        (uuid) async* {
+        (int) async* {
           yield Loading();
-          final failureOrRecipe = await getRecipe(Params(id: uuid));
+          final failureOrRecipe = await getRecipe(Params(id: int));
           yield failureOrRecipe.fold(
             (failure) => Error(errorMessage: _mapFailureToMessage(failure)),
             (recipe) => Loaded(recipe: recipe),
