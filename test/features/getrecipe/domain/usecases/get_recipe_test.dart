@@ -6,15 +6,15 @@ import 'package:receptio_mobile/features/getrecipe/domain/entities/recipe.dart';
 import 'package:receptio_mobile/features/getrecipe/domain/repositories/recipe_repository.dart';
 import 'package:receptio_mobile/features/getrecipe/domain/usecases/get_recipe.dart';
 
-class MockGetRecipesRepository extends Mock implements RecipeRepository {}
+class MockGetRecipeRepository extends Mock implements RecipeRepository {}
 
 void main() {
   GetRecipe useCase;
-  MockGetRecipesRepository mockGetRecipesRepository;
+  MockGetRecipeRepository mockGetRecipeRepository;
 
   setUp(() {
-    mockGetRecipesRepository = MockGetRecipesRepository();
-    useCase = GetRecipe(mockGetRecipesRepository);
+    mockGetRecipeRepository = MockGetRecipeRepository();
+    useCase = GetRecipe(mockGetRecipeRepository);
   });
 
   final tId = 1;
@@ -63,14 +63,14 @@ void main() {
     'should a recipe from the repository',
     () async {
       // arrange
-      when(mockGetRecipesRepository.getRecipe(any))
+      when(mockGetRecipeRepository.getRecipe(any))
           .thenAnswer((_) async => Right(tRecipe));
       // act
-      final result = await useCase(Params(id: tId));
+      final result = await useCase(Param(id: tId));
       // assert
       expect(result, Right(tRecipe));
-      verify(mockGetRecipesRepository.getRecipe(tId));
-      verifyNoMoreInteractions(mockGetRecipesRepository);
+      verify(mockGetRecipeRepository.getRecipe(tId));
+      verifyNoMoreInteractions(mockGetRecipeRepository);
     },
   );
 }

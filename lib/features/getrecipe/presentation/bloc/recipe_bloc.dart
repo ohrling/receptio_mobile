@@ -37,7 +37,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         },
         (int) async* {
           yield Loading();
-          final failureOrRecipe = await getRecipe(Params(id: int));
+          final failureOrRecipe = await getRecipe(Param(id: int));
           yield failureOrRecipe.fold(
             (failure) => Error(errorMessage: _mapFailureToMessage(failure)),
             (recipe) => Loaded(recipe: recipe),

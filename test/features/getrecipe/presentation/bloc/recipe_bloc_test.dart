@@ -92,7 +92,7 @@ void main() {
       bloc.dispatch(GetRecipeById(tIdString));
       await untilCalled(mockGetRecipe(any));
       // assert
-      verify(mockGetRecipe(Params(id: tIdParsed)));
+      verify(mockGetRecipe(Param(id: tIdParsed)));
     });
     test('should emit [Loading, Loaded] when data is gotten successfully',
         () async {
