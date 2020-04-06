@@ -1,9 +1,8 @@
-import 'package:better_uuid/uuid.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class Recipe extends Equatable {
-  final Uuid id;
+  final int id;
   final String name;
   final String description;
   final int cookingTime;

@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:better_uuid/uuid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:receptio_mobile/features/getrecipe/data/models/recipe_model.dart';
 import 'package:receptio_mobile/features/getrecipe/domain/entities/recipe.dart';
 
 void main() {
   final tRecipe = RecipeModel(
-    id: Uuid('d290f1ee-6c54-4b01-90e6-d701748f0851'),
+    id: 1,
     name: 'Chicago Deep-dish Pizza',
     description: 'Classic chicago deep dish pizza with lots of pepperoni!',
     cookingTime: 90,
@@ -35,7 +34,7 @@ void main() {
   );
 
   group('fromJson', () {
-    String jsonRecipe = '''{"id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+    String jsonRecipe = '''{"id": 1,
         "name": "Chicago Deep-dish Pizza",
         "description": "Classic chicago deep dish pizza with lots of pepperoni!",
         "cookingTime": 90,
@@ -70,7 +69,7 @@ void main() {
       () async {
         // arrange
         final expectedMap = {
-          "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+          "id": 1,
           "name": "Chicago Deep-dish Pizza",
           "description":
               "Classic chicago deep dish pizza with lots of pepperoni!",

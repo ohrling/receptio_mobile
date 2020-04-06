@@ -1,4 +1,3 @@
-import 'package:better_uuid/uuid.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -9,7 +8,7 @@ abstract class UseCase<Type, Params> {
 }
 
 class Params extends Equatable {
-  final Uuid id;
+  final int id;
 
   Params({@required this.id}) : super([id]);
 }

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:receptio_mobile/features/getrecipe/presentation/bloc/bloc.dart';
 
-class RecipeControlsWidget extends StatelessWidget {
+class RecipeControlsWidget extends StatefulWidget {
   const RecipeControlsWidget({
     Key key,
   }) : super(key: key);
 
+  @override
+  _RecipeControlsWidgetState createState() => _RecipeControlsWidgetState();
+}
+
+class _RecipeControlsWidgetState extends State<RecipeControlsWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -73,12 +80,16 @@ class RecipeControlsWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                onPressed: () {},
+                onPressed: dispatchRecipe,
               ),
             ),
           ],
         ),
       ],
     );
+  }
+
+  void dispatchRecipe() {
+    BlocProvider.of<RecipeBloc>(context).dispatch(GetRecipeById('1'));
   }
 }

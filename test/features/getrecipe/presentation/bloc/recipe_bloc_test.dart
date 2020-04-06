@@ -1,4 +1,3 @@
-import 'package:better_uuid/uuid.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -43,10 +42,10 @@ void main() {
   });
 
   group('GetRecipe', () {
-    final tIdString = 'd290f1ee-6c54-4b01-90e6-d701748f0851';
-    final tIdParsed = Uuid('d290f1ee-6c54-4b01-90e6-d701748f0851');
+    final tIdString = "1";
+    final tIdParsed = 1;
     final tRecipe = Recipe(
-        id: Uuid('d290f1ee-6c54-4b01-90e6-d701748f0851'),
+        id: 1,
         name: 'Chicago Deep-dish Pizza',
         description: 'Classic chicago deep dish pizza with lots of pepperoni!',
         cookingTime: 90,
@@ -58,7 +57,8 @@ void main() {
         source: 'John Doe');
 
     void setUpMockInputConverterSuccess() =>
-        when(mockInputConverter.stringToUuid(any)).thenReturn(Right(tIdParsed));
+        when(mockInputConverter.stringToInteger(any))
+            .thenReturn(Right(tIdParsed));
 
     test(
         'should call the inputconverter to validate and convert the string an unsigned integer',
@@ -67,13 +67,13 @@ void main() {
       setUpMockInputConverterSuccess();
       // act
       bloc.dispatch(GetRecipeById(tIdString));
-      await untilCalled(mockInputConverter.stringToUuid(any));
+      await untilCalled(mockInputConverter.stringToInteger(any));
       // assert
-      verify(mockInputConverter.stringToUuid(tIdString));
+      verify(mockInputConverter.stringToInteger(tIdString));
     });
     test('should emit [Error] when the input is invalid', () async {
       // arrange
-      when(mockInputConverter.stringToUuid(any))
+      when(mockInputConverter.stringToInteger(any))
           .thenReturn(Left(InvalidInputFailure()));
       // assert later
       final expected = [
