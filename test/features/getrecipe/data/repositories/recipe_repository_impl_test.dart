@@ -6,9 +6,10 @@ import 'package:receptio_mobile/core/error/failures.dart';
 import 'package:receptio_mobile/core/network/network_info.dart';
 import 'package:receptio_mobile/features/getrecipe/data/datasources/recipe_local_datasource.dart';
 import 'package:receptio_mobile/features/getrecipe/data/datasources/recipe_remote_datasource.dart';
-import 'package:receptio_mobile/features/getrecipe/data/models/recipe_model.dart';
 import 'package:receptio_mobile/features/getrecipe/data/repositories/recipe_repository_impl.dart';
 import 'package:receptio_mobile/features/getrecipe/domain/entities/recipe.dart';
+
+import '../../../../fixtures/dummy_recipes.dart';
 
 class MockRemoteDataSource extends Mock implements RecipeRemoteDataSource {}
 
@@ -53,18 +54,7 @@ void main() {
   }
 
   final tId = 1;
-  final tRecipeModel = RecipeModel(
-      id: tId,
-      name: 'Chicago Deep-dish Pizza',
-      description: 'Classic chicago deep dish pizza with lots of pepperoni!',
-      cookingTime: 90,
-      servings: 4,
-      instructions:
-          'Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.',
-      ingredients: ['Cheese', 'Pepperoni', 'Tomato sauce'],
-      image: '/images/pizza.jpg',
-      source: 'John Doe');
-  final Recipe tRecipe = tRecipeModel;
+  final Recipe tRecipe = getRecipeModel(tId);
 
   group('getRecipe', () {
     test(

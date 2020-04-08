@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:receptio_mobile/features/getrecipe/domain/entities/recipe.dart';
 import 'package:receptio_mobile/features/getrecipes/data/models/recipes_model.dart';
 import 'package:receptio_mobile/features/getrecipes/domain/entities/recipes.dart';
 
+import '../../../../fixtures/dummy_recipes.dart';
+
 void main() {
-  final tRecipes = RecipesModel(recipes: _getArrayOfRecipes());
+  final tRecipes = RecipesModel(recipes: getRecipes(2).recipes);
 
   setUp(() {});
 
@@ -21,41 +22,41 @@ void main() {
   group('fromJson', () {
     String jsonString = '''
     [{
-      "id": 42,
-      "name": "Flygande Jakob",
-      "description": "The swedish classic, let it blow you away!",
+      "id": 1,
+      "name": "Chicago Deep-dish Pizza",
+      "description": "Classic chicago deep dish pizza with lots of pepperoni!",
       "cookingTime": 90,
       "servings": 6,
       "instructions":
-      "Cook the rice, make the curry, cook the chicken. Put the rice in the bottom and mix the chicken, curry, banana and peanuts around and put it into the owen!",
+        "Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.",
       "ingredients": [
         {
-        "id": 20,
-        "name": "Rice",
-        "measurementType": "dl",
-        "imageUrl": "/",
-        "amount": 200
+          "id": 45,
+          "name": "Cheese",
+          "measurementType": "grams",
+          "image": "/",
+          "amount": 300
         },
         {
-        "id": 21,
-        "name": "Banana",
-        "measurementType": "pc",
-        "imageUrl": "/",
-        "amount": 1
+          "id": 986,
+          "name": "Pepperoni",
+          "measurementType": "grams",
+          "image": "/",
+          "amount": 100
         },
         {
-        "id": 12,
-        "name": "Cicken",
-        "measurementType": "pc",
-        "imageUrl": "/",
-        "amount": 3
+          "id": 983,
+          "name": "Tomato sauce",
+          "measurementType": "grams",
+          "image": "/",
+          "amount": 500
         }
       ],
-      "image": "/images/flygande_jakob.jpg",
+      "image": "/images/pizza.jpg",
       "source": "John Doe"
     },
     {
-      "id": 45,
+      "id": 2,
       "name": "Chicago Deep-dish Pizza",
       "description": "Classic chicago deep dish pizza with lots of pepperoni!",
       "cookingTime": 90,
@@ -63,25 +64,25 @@ void main() {
       "instructions": "Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.",
       "ingredients": [
         {
-        "id": 45,
-        "name": "Cheese",
-        "measurementType": "grams",
-        "image": "/",
-        "amount": 300
+          "id": 45,
+          "name": "Cheese",
+          "measurementType": "grams",
+          "image": "/",
+          "amount": 300
         },
         {
-        "id": 986,
-        "name": "Pepperoni",
-        "measurementType": "grams",
-        "image": "/",
-        "amount": 100
+          "id": 986,
+          "name": "Pepperoni",
+          "measurementType": "grams",
+          "image": "/",
+          "amount": 100
         },
         {
-        "id": 983,
-        "name": "Tomato sauce",
-        "measurementType": "grams",
-        "image": "/",
-        "amount": 500
+          "id": 983,
+          "name": "Tomato sauce",
+          "measurementType": "grams",
+          "image": "/",
+          "amount": 500
         }
       ],
       "image": "/images/pizza.jpg",
@@ -101,48 +102,48 @@ void main() {
   group('toJson', () {
     test('should return a JSON map containing the proper data', () {
       // arrange
-      final expectedMap = {
+      final expectedMap = [
         {
-          "id": 42,
-          "name": "Flygande Jakob",
-          "description": "The swedish classic, let it blow you away!",
+          "id": 1,
+          "name": "Chicago Deep-dish Pizza",
+          "description": "Classic chicago deep dish pizza with lots of pepperoni!",
           "cookingTime": 90,
-          "servings": 6,
+          "servings": 4,
           "instructions":
-              "Cook the rice, make the curry, cook the chicken. Put the rice in the bottom and mix the chicken, curry, banana and peanuts around and put it into the owen!",
+            "Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.",
           "ingredients": [
             {
-              "id": 20,
-              "name": "Rice",
-              "measurementType": "dl",
-              "imageUrl": "/",
-              "amount": 200
+              "id": 45,
+              "name": "Cheese",
+              "measurementType": "grams",
+              "image": "/",
+              "amount": 300
             },
             {
-              "id": 21,
-              "name": "Banana",
-              "measurementType": "pc",
-              "imageUrl": "/",
-              "amount": 1
+              "id": 986,
+              "name": "Pepperoni",
+              "measurementType": "grams",
+              "image": "/",
+              "amount": 100
             },
             {
-              "id": 12,
-              "name": "Cicken",
-              "measurementType": "pc",
-              "imageUrl": "/",
-              "amount": 3
+              "id": 983,
+              "name": "Tomato sauce",
+              "measurementType": "grams",
+              "image": "/",
+              "amount": 500
             }
           ],
-          "image": "/images/flygande_jakob.jpg",
+          "image": "/images/pizza.jpg",
           "source": "John Doe"
         },
         {
-          "id": 45,
+          "id": 2,
           "name": "Chicago Deep-dish Pizza",
           "description":
               "Classic chicago deep dish pizza with lots of pepperoni!",
           "cookingTime": 90,
-          "servings": 6,
+          "servings": 4,
           "instructions":
               "Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.",
           "ingredients": [
@@ -171,82 +172,12 @@ void main() {
           "image": "/images/pizza.jpg",
           "source": "John Doe"
         }
-      };
+      ];
       // act
       final result = tRecipes.toJson();
+      print(result);
       // assert
-      expect(result, expectedMap);
+      expect(result.toString().trim(), expectedMap.toString().trim());
     });
   });
-}
-
-_getArrayOfRecipes() {
-  final recipeOne = Recipe(
-      id: 42,
-      name: 'Flygande Jakob',
-      description: 'The swedish classic, let it blow you away!',
-      cookingTime: 90,
-      servings: 6,
-      instructions:
-          'Cook the rice, make the curry, cook the chicken. Put the rice in the bottom and mix the chicken, curry, banana and peanuts around and put it into the owen!',
-      ingredients: [
-        {
-          "id": 20,
-          "name": "Rice",
-          "measurementType": "dl",
-          "imageUrl": "/",
-          "amount": 200
-        },
-        {
-          "id": 21,
-          "name": "Banana",
-          "measurementType": "pc",
-          "imageUrl": "/",
-          "amount": 1
-        },
-        {
-          "id": 12,
-          "name": "Cicken",
-          "measurementType": "pc",
-          "imageUrl": "/",
-          "amount": 3
-        }
-      ],
-      image: '/images/flygande_jakob.jpg',
-      source: 'John Doe');
-  final recipeTwo = Recipe(
-      id: 45,
-      name: 'Chicago Deep-dish Pizza',
-      description: 'Classic chicago deep dish pizza with lots of pepperoni!',
-      cookingTime: 90,
-      servings: 6,
-      instructions:
-          'Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.',
-      ingredients: [
-        {
-          "id": 45,
-          "name": "Cheese",
-          "measurementType": "grams",
-          "image": "/",
-          "amount": 300
-        },
-        {
-          "id": 986,
-          "name": "Pepperoni",
-          "measurementType": "grams",
-          "image": "/",
-          "amount": 100
-        },
-        {
-          "id": 983,
-          "name": "Tomato sauce",
-          "measurementType": "grams",
-          "image": "/",
-          "amount": 500
-        }
-      ],
-      image: '/images/pizza.jpg',
-      source: 'John Doe');
-  List<Recipe> recipes = [recipeOne, recipeTwo];
-  return recipes;
 }

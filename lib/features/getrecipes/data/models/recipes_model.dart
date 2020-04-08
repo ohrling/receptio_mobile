@@ -14,9 +14,10 @@ class RecipesModel extends Recipes {
   }
 
   List<dynamic> toJson() {
+    print(recipes.toString());
     var _recipes = [];
     for (var recipe in recipes) {
-      var _recipe = {
+      _recipes.add({
         'id': recipe.id,
         'name': recipe.name,
         'description': recipe.description,
@@ -26,8 +27,9 @@ class RecipesModel extends Recipes {
         'ingredients': recipe.ingredients,
         'image': recipe.image,
         'source': recipe.source
-      };
-      _recipes.add(_recipe);
+      });
+      //};
+      //_recipes.add(_recipe);
     }
     return _recipes;
   }

@@ -4,9 +4,10 @@ import 'package:mockito/mockito.dart';
 import 'package:receptio_mobile/core/error/failures.dart';
 import 'package:receptio_mobile/core/usecases/usecase.dart';
 import 'package:receptio_mobile/core/util/input_converter.dart';
-import 'package:receptio_mobile/features/getrecipe/domain/entities/recipe.dart';
 import 'package:receptio_mobile/features/getrecipe/domain/usecases/get_recipe.dart';
 import 'package:receptio_mobile/features/getrecipe/presentation/bloc/bloc.dart';
+
+import '../../../../fixtures/dummy_recipes.dart';
 
 class MockGetRecipe extends Mock implements GetRecipe {}
 
@@ -44,17 +45,7 @@ void main() {
   group('GetRecipe', () {
     final tIdString = "1";
     final tIdParsed = 1;
-    final tRecipe = Recipe(
-        id: 1,
-        name: 'Chicago Deep-dish Pizza',
-        description: 'Classic chicago deep dish pizza with lots of pepperoni!',
-        cookingTime: 90,
-        servings: 4,
-        instructions:
-            'Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.',
-        ingredients: ['Cheese', 'Pepperoni', 'Tomato sauce'],
-        image: '/images/pizza.jpg',
-        source: 'John Doe');
+    final tRecipe = getRecipeModel(tIdParsed);
 
     void setUpMockInputConverterSuccess() =>
         when(mockInputConverter.stringToInteger(any))
