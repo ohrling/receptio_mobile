@@ -22,30 +22,15 @@ void main() {
   });
 
   group('getLastRecipe', () {
-    String jsonRecipe = '''{"id": 1,
-        "name": "Chicago Deep-dish Pizza",
-        "description": "Classic chicago deep dish pizza with lots of pepperoni!",
-        "cookingTime": 90,
-        "servings": 4,
-        "instructions": "Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.",
-        "ingredients": [
-        {
-        "id": "766c510a-4218-4686-86d2-259b8e172ebb",
-        "name": "Cheese",
-        "measurementType": "grams",
-        "image": "/"
-        }
-        ],
-        "image": "/images/pizza.jpg",
-        "source": "John Doe"}''';
+    String _jsonRecipe = jsonRecipe();
 
-    final tRecipeModel = RecipeModel.fromJson(json.decode(jsonRecipe));
+    final tRecipeModel = RecipeModel.fromJson(json.decode(_jsonRecipe));
 
     test(
       'should return Recipe from shared preferences when there is one in the cache',
       () async {
         // arrange
-        when(mockSharedPreferences.getString(any)).thenReturn(jsonRecipe);
+        when(mockSharedPreferences.getString(any)).thenReturn(_jsonRecipe);
         // act
         final result = await dataSource.getLastRecipe();
         // assert

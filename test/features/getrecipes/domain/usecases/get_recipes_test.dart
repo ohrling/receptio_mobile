@@ -19,7 +19,7 @@ void main() {
     useCase = GetRecipes(mockGetRecipesRepository);
   });
 
-  final tRecipes = Recipes(recipes: getRecipes(2).recipes);
+  final tRecipes = Recipes(recipes: getRecipesModel(2).recipes);
   final tSearchValues = ['cheese', 'salami', 'banan'];
 
   test(

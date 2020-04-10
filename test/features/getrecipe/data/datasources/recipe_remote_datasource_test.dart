@@ -7,30 +7,14 @@ import 'package:receptio_mobile/core/error/exceptions.dart';
 import 'package:receptio_mobile/features/getrecipe/data/datasources/recipe_remote_datasource.dart';
 import 'package:receptio_mobile/features/getrecipe/data/models/recipe_model.dart';
 
+import '../../../../fixtures/dummy_recipes.dart';
+
 class MockHttpClient extends Mock implements http.Client {}
 
 void main() {
   RecipeRemoteDataSourceImpl dataSource;
   MockHttpClient mockHttpClient;
-  String _tJsonRecipe = '''
-  {
-    "id": 1,
-    "name": "Chicago Deep-dish Pizza",
-    "description": "Classic chicago deep dish pizza with lots of pepperoni!",
-    "cookingTime": 90,
-    "servings": 4,
-    "instructions": "Buy dough, roll out, add (in order) cheese, pepperoni, tomato sauce. Top with parmesan cheese and cook in 200C for 30 minutes. Let cool down and eat before anyone asks for a taste.",
-    "ingredients": [
-      {
-      "id": "766c510a-4218-4686-86d2-259b8e172ebb",
-      "name": "Cheese",
-      "measurementType": "grams",
-      "image": "/"
-      }
-    ],
-    "image": "/images/pizza.jpg",
-    "source": "John Doe"
-  }''';
+  String _tJsonRecipe = jsonRecipe();
 
   setUp(() {
     mockHttpClient = MockHttpClient();

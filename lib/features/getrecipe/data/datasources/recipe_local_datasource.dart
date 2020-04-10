@@ -10,7 +10,7 @@ abstract class RecipeLocalDataSource {
   /// Gets cached [RecipeModel] which was used last time
   /// the user had the app open.
   ///
-  /// Throws [CacheException] if no chached data is present.
+  /// Throws [CacheException] if no cached data is present.
   Future<Recipe> getLastRecipe();
 
   Future<void> cacheRecipe(RecipeModel recipeToCache);
@@ -35,7 +35,7 @@ class RecipeLocalDataSourceImpl implements RecipeLocalDataSource {
     if (jsonString != null) {
       return Future.value(RecipeModel.fromJson(json.decode(jsonString)));
     } else {
-      throw CacheException('Cached recipe is missing.');
+      throw CacheException('There isn\'t any recipe in the cache.');
     }
   }
 }
