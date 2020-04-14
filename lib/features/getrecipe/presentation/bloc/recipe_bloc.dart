@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:receptio_mobile/core/error/failures.dart';
 import 'package:receptio_mobile/core/usecases/usecase.dart';
-import 'package:receptio_mobile/core/util/input_converter.dart';
+import 'package:receptio_mobile/core/util/recipe_converters.dart';
 import 'package:receptio_mobile/features/getrecipe/domain/usecases/get_recipe.dart';
 
 import 'bloc.dart';
@@ -16,7 +16,7 @@ const String INVALID_INPUT_FAILURE_MESSAGE =
 
 class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   final GetRecipe getRecipe;
-  final InputConverter inputConverter;
+  final RecipeConverter inputConverter;
 
   RecipeBloc({@required this.getRecipe, @required this.inputConverter})
       : assert(getRecipe != null),
@@ -30,7 +30,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     RecipeEvent event,
   ) async* {
     if (event is GetRecipeById) {
-      final inputEither = inputConverter.stringToInteger(event.idString);
+      final inputEither = inputConverter.convert(event.idString);
       yield* inputEither.fold(
         (failure) async* {
           yield Error(errorMessage: INVALID_INPUT_FAILURE_MESSAGE);

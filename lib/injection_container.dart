@@ -2,7 +2,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:receptio_mobile/core/network/network_info.dart';
-import 'package:receptio_mobile/core/util/input_converter.dart';
+import 'package:receptio_mobile/core/util/recipe_converters.dart';
 import 'package:receptio_mobile/features/getrecipe/data/datasources/recipe_local_datasource.dart';
 import 'package:receptio_mobile/features/getrecipe/data/datasources/recipe_remote_datasource.dart';
 import 'package:receptio_mobile/features/getrecipe/data/repositories/recipe_repository_impl.dart';
@@ -35,7 +35,9 @@ Future<void> init() async {
       () => RecipeLocalDataSourceImpl(sharedPreferences: sl()));
 
   // Core
-  sl.registerLazySingleton(() => InputConverter());
+  sl.registerLazySingleton<InputConverter>(() => InputConverter());
+  sl.registerLazySingleton<SearchValuesConverter>(
+      () => SearchValuesConverter());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   // External

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:receptio_mobile/core/error/failures.dart';
 import 'package:receptio_mobile/core/usecases/usecase.dart';
-import 'package:receptio_mobile/core/util/input_converter.dart';
+import 'package:receptio_mobile/core/util/recipe_converters.dart';
 import 'package:receptio_mobile/features/getrecipe/domain/usecases/get_recipe.dart';
 import 'package:receptio_mobile/features/getrecipe/presentation/bloc/bloc.dart';
 
@@ -11,7 +11,7 @@ import '../../../../fixtures/dummy_recipes.dart';
 
 class MockGetRecipe extends Mock implements GetRecipe {}
 
-class MockInputConverter extends Mock implements InputConverter {}
+class MockInputConverter extends Mock implements RecipeConverter {}
 
 void main() {
   RecipeBloc bloc;
@@ -48,8 +48,7 @@ void main() {
     final tRecipe = getRecipeModel(tIdParsed);
 
     void setUpMockInputConverterSuccess() =>
-        when(mockInputConverter.stringToInteger(any))
-            .thenReturn(Right(tIdParsed));
+        when(mockInputConverter.convert(any)).thenReturn(Right(tIdParsed));
 
     test(
         'should call the inputconverter to validate and convert the string an unsigned integer',
@@ -58,13 +57,13 @@ void main() {
       setUpMockInputConverterSuccess();
       // act
       bloc.dispatch(GetRecipeById(tIdString));
-      await untilCalled(mockInputConverter.stringToInteger(any));
+      await untilCalled(mockInputConverter.convert(any));
       // assert
-      verify(mockInputConverter.stringToInteger(tIdString));
+      verify(mockInputConverter.convert(tIdString));
     });
     test('should emit [Error] when the input is invalid', () async {
       // arrange
-      when(mockInputConverter.stringToInteger(any))
+      when(mockInputConverter.convert(any))
           .thenReturn(Left(InvalidInputFailure()));
       // assert later
       final expected = [

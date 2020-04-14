@@ -20,7 +20,7 @@ void main() {
   });
 
   final tRecipes = Recipes(recipes: getRecipesModel(2).recipes);
-  final tSearchValues = ['cheese', 'salami', 'banan'];
+  final tSearchString = 'chicago pizza';
 
   test(
     'should a recipes from the repository',
@@ -29,10 +29,10 @@ void main() {
       when(mockGetRecipesRepository.getRecipes(any))
           .thenAnswer((_) async => Right(tRecipes));
       // act
-      final result = await useCase(Params(searchValues: tSearchValues));
+      final result = await useCase(Params(searchValues: tSearchString));
       // assert
       expect(result, Right(tRecipes));
-      verify(mockGetRecipesRepository.getRecipes(tSearchValues));
+      verify(mockGetRecipesRepository.getRecipes(tSearchString));
       verifyNoMoreInteractions(mockGetRecipesRepository);
     },
   );

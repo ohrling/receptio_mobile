@@ -10,7 +10,7 @@ abstract class RecipesRemoteDataSource {
   /// Calls the http://receptio.herokuapp.com/recipe/searchString endpoint.
   ///
   /// Throws a [ServerException] for all error codes.
-  Future<Recipes> getRecipes(List<String> searchValues);
+  Future<Recipes> getRecipes(String searchString);
 }
 
 class RecipesRemoteDataSourceImpl implements RecipesRemoteDataSource {
@@ -19,27 +19,14 @@ class RecipesRemoteDataSourceImpl implements RecipesRemoteDataSource {
   RecipesRemoteDataSourceImpl({@required this.client});
 
   @override
-  Future<Recipes> getRecipes(List<String> searchValues) async {
-    final response = await client.get(
-        'http://receptio.herokuapp.com/recipe?searchString=' +
-            buildSearch(searchValues));
+  Future<Recipes> getRecipes(String searchString) async {
+    final _url =
+        'http://receptio.herokuapp.com/recipe?searchString=' + searchString;
+    final response = await client.get(_url);
     if (response.statusCode == 200) {
       return RecipesModel.fromJson(json.decode(response.body));
     } else {
       throw ServerException('Couldn\'t get the recipe.');
     }
-  }
-
-  @visibleForTesting
-  buildSearch(List<String> searchValues) {
-    String search = '';
-    int index = 0;
-    while (index < searchValues.length - 1) {
-      search = search + searchValues[index].toLowerCase() + ',';
-      index++;
-    }
-    search = search + searchValues[index].toLowerCase();
-    search = search.split(' ').join('%20');
-    return search;
   }
 }

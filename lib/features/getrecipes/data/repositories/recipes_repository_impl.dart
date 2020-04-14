@@ -19,10 +19,11 @@ class RecipesRepositoryImpl extends RecipesRepository {
       @required this.networkInfo});
 
   @override
-  Future<Either<Failure, Recipes>> getRecipes(List<String> searchValues) async {
+  Future<Either<Failure, Recipes>> getRecipes(String searchString) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteRecipes = await remoteDataSource.getRecipes(searchValues);
+        final remoteRecipes =
+            await remoteDataSource.getRecipes(searchString.toString());
         localDataSource.cacheRecipes(remoteRecipes);
         return Right(remoteRecipes);
       } on ServerException {

@@ -53,7 +53,7 @@ void main() {
     });
   }
 
-  final tSearchValues = ['Cheese', 'Tomato', 'Pepperoni'];
+  final tSearchString = 'Chicago pizza';
   final Recipes tRecipes = getRecipesModel(2);
 
   group('getRecipes', () {
@@ -63,7 +63,7 @@ void main() {
         // arrange
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
         // act
-        repository.getRecipes(tSearchValues);
+        repository.getRecipes(tSearchString);
         // assert
         verify(mockNetworkInfo.isConnected);
       },
@@ -77,9 +77,9 @@ void main() {
           when(mockRemoteDataSource.getRecipes(any))
               .thenAnswer((_) async => tRecipes);
           // act
-          final result = await repository.getRecipes(tSearchValues);
+          final result = await repository.getRecipes(tSearchString);
           // assert
-          verify(mockRemoteDataSource.getRecipes(tSearchValues));
+          verify(mockRemoteDataSource.getRecipes(tSearchString.toString()));
           expect(result, equals(Right(tRecipes)));
         },
       );
@@ -87,12 +87,12 @@ void main() {
         'should cache the data locally when the call to remote data source is successful',
         () async {
           // arrange
-          when(mockRemoteDataSource.getRecipes(tSearchValues))
+          when(mockRemoteDataSource.getRecipes(tSearchString.toString()))
               .thenAnswer((_) async => tRecipes);
           // act
-          await repository.getRecipes(tSearchValues);
+          await repository.getRecipes(tSearchString);
           // assert
-          verify(mockRemoteDataSource.getRecipes(tSearchValues));
+          verify(mockRemoteDataSource.getRecipes(tSearchString.toString()));
           verify(mockLocalDataSource.cacheRecipes(tRecipes));
         },
       );
@@ -104,9 +104,9 @@ void main() {
           when(mockRemoteDataSource.getRecipes(any))
               .thenThrow(ServerException('Couldn\'t connect to server.'));
           // act
-          final result = await repository.getRecipes(tSearchValues);
+          final result = await repository.getRecipes(tSearchString);
           // assert
-          verify(mockRemoteDataSource.getRecipes(tSearchValues));
+          verify(mockRemoteDataSource.getRecipes(tSearchString.toString()));
           verifyZeroInteractions(mockLocalDataSource);
           expect(result, equals(Left(ServerFailure())));
         },
@@ -118,10 +118,11 @@ void main() {
         'should return a ServerFailure when offline',
         () async {
           // arrange
-          when(mockRemoteDataSource.getRecipes(tSearchValues)).thenThrow(
-              ServerException('Couldn\'t get any recipes. Are you offline?'));
+          when(mockRemoteDataSource.getRecipes(tSearchString.toString()))
+              .thenThrow(ServerException(
+                  'Couldn\'t get any recipes. Are you offline?'));
           // act
-          final result = await repository.getRecipes(tSearchValues);
+          final result = await repository.getRecipes(tSearchString);
           // assert
           verifyZeroInteractions(mockRemoteDataSource);
           verifyZeroInteractions(mockLocalDataSource);

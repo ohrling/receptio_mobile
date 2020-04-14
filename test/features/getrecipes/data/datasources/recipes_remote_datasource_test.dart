@@ -12,7 +12,7 @@ class MockHttpClient extends Mock implements http.Client {}
 void main() {
   RecipesRemoteDataSourceImpl dataSource;
   MockHttpClient mockHttpClient;
-  final tSearchValues = ['Cheese', 'Tomato', 'Lemon Juice'];
+  final tSearchString = 'chicago%20pizza';
   String _tJsonRecipes = '''
     [{
       "id": 1,
@@ -93,35 +93,6 @@ void main() {
         .thenAnswer((_) async => http.Response(_tJsonRecipes, 200));
   }
 
-  group('buildSearch', () {
-    test(
-      'should convert a list to string lowercase string',
-      () async {
-        // act
-        final result = dataSource.buildSearch(['Lemon']);
-        // assert
-        expect(result, 'lemon');
-      },
-    );
-    test(
-      'should convert a list to string with valid space-replacements',
-      () async {
-        // act
-        final result = dataSource.buildSearch(['Lemon Juice']);
-        // assert
-        expect(result, 'lemon%20juice');
-      },
-    );
-    test(
-      'should convert a list to a string of words separated with commas',
-      () async {
-        // act
-        final result = dataSource.buildSearch(['Cheese', 'Lemon Juice']);
-        // assert
-        expect(result, 'cheese,lemon%20juice');
-      },
-    );
-  });
   group('getRecipes', () {
     final tRecipes = RecipesModel.fromJson(json.decode(_tJsonRecipes));
     test(
@@ -130,10 +101,10 @@ void main() {
         // arrange
         setUpMockHttpClientSuccess200();
         // act
-        dataSource.getRecipes(tSearchValues);
+        dataSource.getRecipes(tSearchString);
         // assert
         verify(mockHttpClient.get(
-            'http://receptio.herokuapp.com/recipe?searchString=cheese,tomato,lemon%20juice'));
+            'http://receptio.herokuapp.com/recipe?searchString=chicago%20pizza'));
       },
     );
     test(
@@ -142,7 +113,7 @@ void main() {
         // arrange
         setUpMockHttpClientSuccess200();
         // act
-        final result = await dataSource.getRecipes(tSearchValues);
+        final result = await dataSource.getRecipes(tSearchString);
         // assert
         expect(result, equals(tRecipes));
       },
@@ -156,7 +127,7 @@ void main() {
         // act
         final call = dataSource.getRecipes;
         // assert
-        expect(() => call(tSearchValues),
+        expect(() => call(tSearchString),
             throwsA(isInstanceOf<ServerException>()));
       },
     );

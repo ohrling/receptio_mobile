@@ -10,3 +10,5 @@ class ServerFailure extends Failure {}
 class CacheFailure extends Failure {}
 
 class DoNotExistFailure extends Failure {}
+
+class InvalidInputFailure extends Failure {}

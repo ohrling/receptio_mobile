@@ -18,7 +18,7 @@ class Param extends Equatable {
 }
 
 class Params extends Equatable {
-  final List<String> searchValues;
+  final String searchValues;
 
   Params({@required this.searchValues}) : super([searchValues]);
 }
