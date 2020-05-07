@@ -35,7 +35,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
             ),
           ],
         ),
-        textTheme: TextTheme(title: TextStyle(color: Colors.white)),
+        textTheme: TextTheme(headline: TextStyle(color: Colors.white)),
       ),
       body: buildRecipeListBody(context),
     );
