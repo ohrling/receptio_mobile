@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:receptio_mobile/features/getrecipe/presentation/pages/recipe_page.dart';
+import 'package:receptio_mobile/core/routes/route_generator.dart';
+import 'package:receptio_mobile/injection.dart';
 
-import 'injection_container.dart' as di;
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await di.init(); // Makes the ui wait for the dependencies to be injected
-  runApp(MyApp());
+void main() {
+  configureInjection(Env.prod);
+  runApp(Receptio());
 }
 
-class MyApp extends StatelessWidget {
+class Receptio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +16,8 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.green.shade600,
         accentColor: Colors.green.shade400,
       ),
-      home: RecipePage(),
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
