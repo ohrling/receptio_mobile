@@ -40,7 +40,6 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
             ),
           ],
         ),
-        textTheme: TextTheme(headline: TextStyle(color: Colors.white)),
       ),
       body: BlocProvider(
         create: (BuildContext context) => AddRecipeBloc(
