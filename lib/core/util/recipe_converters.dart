@@ -1,30 +1,24 @@
-import 'package:dartz/dartz.dart';
-import 'package:receptio_mobile/core/error/failures.dart';
+import 'package:injectable/injectable.dart';
+import 'package:receptio_mobile/core/error/states.dart';
 
-abstract class RecipeConverter {
-  Either<Failure, dynamic> convert(String str);
-}
-
-class InputConverter implements RecipeConverter {
-  @override
-  Either<Failure, int> convert(String str) {
+@injectable
+class InputConverter {
+  State stringToInteger(String str) {
     try {
       final id = int.parse(str);
       if (id < 1) {
-        throw FormatException();
+        return State<String>.error('Värdet måste vara positivt');
       } else {
-        return Right(id);
+        return State<int>.success(id);
       }
     } on Exception {
-      return Left(InvalidInputFailure());
+      return State<String>.error('Det var en ej en integer som inmatning.');
     }
   }
-}
-
-class SearchValuesConverter implements RecipeConverter {
-  @override
-  Either<Failure, String> convert(String str) {
-    try {
+  
+  State listToString(List<String> searchValues) {
+    if(searchValues != null){
+      String str = searchValues.toString();
       String search = str.toLowerCase();
       search = search
           .split(RegExp('(?<=[a-z])\\s'))
@@ -32,9 +26,8 @@ class SearchValuesConverter implements RecipeConverter {
           .replaceAll('[', '')
           .replaceAll(']', '')
           .replaceAll(' ', '');
-      return Right(search);
-    } on Exception {
-      return Left(InvalidInputFailure());
+      return State<String>.success(search);
     }
+    return State<String>.error('Något var fel med dessa sökvärden');
   }
 }
