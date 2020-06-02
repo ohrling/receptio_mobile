@@ -4,86 +4,122 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
+import 'package:receptio/register_module.dart';
+import 'package:http/src/client.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:receptio_mobile/core/network/network_info.dart';
-import 'package:receptio_mobile/core/util/recipe_converters.dart';
-import 'package:receptio_mobile/core/network/recipe_client.dart';
-import 'package:receptio_mobile/features/recipes/data/datasources/recipe_datasource.dart';
-import 'package:receptio_mobile/features/recipes/data/repositories/recipes_repository.dart';
-import 'package:receptio_mobile/features/recipes/domain/repositories/repository.dart';
-import 'package:receptio_mobile/features/recipes/domain/usecases/get_ingredients.dart';
-import 'package:receptio_mobile/features/recipes/domain/usecases/get_measurements.dart';
-import 'package:receptio_mobile/features/recipes/domain/usecases/get_recipe_list.dart';
-import 'package:receptio_mobile/features/recipes/domain/usecases/post_recipe.dart';
-import 'package:receptio_mobile/features/recipes/presentation/bloc/displayrecipe/recipelist_bloc.dart';
-import 'package:receptio_mobile/features/recipes/presentation/bloc/addrecipe/addrecipe_bloc.dart';
+import 'package:receptio/core/network/network_info.dart';
+import 'package:receptio/features/api/data/datasources/recipe_datasource.dart';
+import 'package:flutter_auth0/flutter_auth0.dart';
+import 'package:receptio/features/auth/data/datasources/auth_datasource.dart';
+import 'package:receptio/features/auth/data/repositories/auth0repository.dart';
+import 'package:receptio/features/auth/domain/repositories/auth_repository.dart';
+import 'package:receptio/features/auth/domain/usecases/get_authentication_token.dart';
+import 'package:receptio/features/api/data/repositories/recipes_repository.dart';
+import 'package:receptio/features/api/domain/repositories/receptio_repository.dart';
+import 'package:receptio/features/auth/domain/usecases/reset_password.dart';
+import 'package:receptio/features/auth/domain/usecases/signin.dart';
+import 'package:receptio/features/auth/domain/usecases/signup.dart';
+import 'package:receptio/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:receptio/features/api/domain/usecases/get_ingredient_search_recipe_list.dart';
+import 'package:receptio/features/api/domain/usecases/get_ingredients.dart';
+import 'package:receptio/features/api/domain/usecases/get_measurements.dart';
+import 'package:receptio/features/api/domain/usecases/get_name_search_recipe_list.dart';
+import 'package:receptio/features/api/domain/usecases/get_user_recipes.dart';
+import 'package:receptio/features/api/domain/usecases/post_recipe.dart';
+import 'package:receptio/features/api/presentation/bloc/receptio/receptio_bloc.dart';
+import 'package:receptio/features/api/presentation/bloc/addrecipe/addrecipe_bloc.dart';
+import 'package:receptio/features/api/presentation/bloc/displayrecipe/display_recipe_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 void $initGetIt(GetIt g, {String environment}) {
   final registerModule = _$RegisterModule();
-  g.registerFactory<InputConverter>(() => InputConverter());
-  g.registerFactory<Repository>(
+  g.registerFactory<Client>(() => registerModule.client,
+      instanceName: 'Client');
+  g.registerFactory<DataConnectionChecker>(
+      () => registerModule.connectionChecker);
+  g.registerFactory<NetworkInfo>(
+      () => NetworkInfoImpl(g<DataConnectionChecker>()),
+      instanceName: 'NetworkInfo');
+  g.registerFactory<RecipeDataSource>(
+      () => RemoteRecipeDataSource(g<Client>(instanceName: 'Client')),
+      instanceName: 'RecipeDataSource');
+  g.registerFactory<String>(() => registerModule.clientId,
+      instanceName: 'clientId');
+  g.registerFactory<String>(() => registerModule.url, instanceName: 'url');
+  g.registerFactory<Auth0Auth>(
+      () => registerModule.auth(
+          g<String>(instanceName: 'clientId'), g<String>(instanceName: 'url')),
+      instanceName: 'Auth');
+  g.registerFactory<AuthDataSource>(
+      () => Auth0DataSource(g<Auth0Auth>(instanceName: 'Auth')),
+      instanceName: 'Auth0DataSource');
+  g.registerFactory<AuthRepository>(
+      () => Auth0Repository(g<AuthDataSource>(instanceName: 'Auth0DataSource'),
+          g<NetworkInfo>(instanceName: 'NetworkInfo')),
+      instanceName: 'Auth0Repository');
+  g.registerFactory<GetAuthenticationToken>(
+      () => GetAuthenticationToken(
+          g<AuthRepository>(instanceName: 'Auth0Repository')),
+      instanceName: 'GetAuthenticationToken');
+  g.registerFactory<ReceptioRepository>(
       () => RecipesRepository(
           g<RecipeDataSource>(instanceName: 'RecipeDataSource'),
           g<NetworkInfo>(instanceName: 'NetworkInfo')),
-      instanceName: 'Repository');
+      instanceName: 'ReceptioRepository');
+  g.registerFactory<ResetPassword>(
+      () => ResetPassword(g<AuthRepository>(instanceName: 'Auth0Repository')),
+      instanceName: 'ResetPassword');
+  g.registerFactory<SignIn>(
+      () => SignIn(g<AuthRepository>(instanceName: 'Auth0Repository')),
+      instanceName: 'SignIn');
+  g.registerFactory<SignUp>(
+      () => SignUp(g<AuthRepository>(instanceName: 'Auth0Repository')),
+      instanceName: 'SignUp');
+  g.registerFactory<AuthBloc>(
+      () => AuthBloc(
+            g<GetAuthenticationToken>(instanceName: 'GetAuthenticationToken'),
+            g<SignIn>(instanceName: 'SignIn'),
+            g<SignUp>(instanceName: 'SignUp'),
+            g<ResetPassword>(instanceName: 'ResetPassword'),
+          ),
+      instanceName: 'AuthBloc');
+  g.registerFactory<GetIngredientSearchRecipeList>(
+      () => GetIngredientSearchRecipeList(
+          g<ReceptioRepository>(instanceName: 'ReceptioRepository')),
+      instanceName: 'GetIngredientSearchRecipeList');
   g.registerFactory<GetIngredients>(
-      () => GetIngredients(g<Repository>(instanceName: 'Repository')),
+      () => GetIngredients(
+          g<ReceptioRepository>(instanceName: 'ReceptioRepository')),
       instanceName: 'GetIngredients');
   g.registerFactory<GetMeasurements>(
-      () => GetMeasurements(g<Repository>(instanceName: 'Repository')),
+      () => GetMeasurements(
+          g<ReceptioRepository>(instanceName: 'ReceptioRepository')),
       instanceName: 'GetMeasurements');
-  g.registerFactory<GetRecipeList>(
-      () => GetRecipeList(g<Repository>(instanceName: 'Repository')),
-      instanceName: 'GetRecipeList');
+  g.registerFactory<GetNameSearchRecipeList>(
+      () => GetNameSearchRecipeList(
+          g<ReceptioRepository>(instanceName: 'ReceptioRepository')),
+      instanceName: 'GetNameSearchRecipeList');
+  g.registerFactory<GetUserRecipes>(
+      () => GetUserRecipes(
+          g<ReceptioRepository>(instanceName: 'ReceptioRepository')),
+      instanceName: 'GetUserRecipes');
   g.registerFactory<PostRecipe>(
-      () => PostRecipe(g<Repository>(instanceName: 'Repository')),
+      () =>
+          PostRecipe(g<ReceptioRepository>(instanceName: 'ReceptioRepository')),
       instanceName: 'PostRecipe');
-  g.registerFactory<RecipelistBloc>(
-      () => RecipelistBloc(g<GetRecipeList>(instanceName: 'GetRecipeList')),
-      instanceName: 'RecipelistBloc');
+  g.registerFactory<ReceptioBloc>(
+      () => ReceptioBloc(g<GetUserRecipes>(instanceName: 'GetUserRecipes')),
+      instanceName: 'ReceptioBloc');
   g.registerFactory<AddRecipeBloc>(
-      () => AddRecipeBloc(
-            g<PostRecipe>(instanceName: 'PostRecipe'),
-            g<GetIngredients>(instanceName: 'GetIngredients'),
-            g<GetMeasurements>(instanceName: 'GetMeasurements'),
-          ),
+      () => AddRecipeBloc(g<AuthBloc>(instanceName: 'AuthBloc'),
+          g<PostRecipe>(instanceName: 'PostRecipe')),
       instanceName: 'AddRecipeBloc');
-
-  //Register test Dependencies --------
-  if (environment == 'test') {
-    g.registerFactory<DataConnectionChecker>(() => MockDataConnectionChecker(),
-        instanceName: 'DataConnectionChecker');
-    g.registerFactory<NetworkInfo>(() => MockNetworkInfo(),
-        instanceName: 'MockNetworkInfo');
-    g.registerFactory<RecipeClient>(() => MockClient(),
-        instanceName: 'MockedClient');
-    g.registerFactory<RecipeDataSource>(() => MockDataSource(),
-        instanceName: 'MockDataSource');
-    g.registerFactory<Repository>(() => MockRepository(),
-        instanceName: 'MockRepository');
-  }
-
-  //Register prod Dependencies --------
-  if (environment == 'prod') {
-    g.registerFactory<NetworkInfo>(
-        () => NetworkInfoImpl(
-            g<DataConnectionChecker>(instanceName: 'DataConnectionChecker')),
-        instanceName: 'NetworkInfo');
-    g.registerFactory<RecipeClient>(() => RemoteClient(),
-        instanceName: 'Client');
-    g.registerFactory<RecipeDataSource>(
-        () => RemoteRecipeDataSource(g<RecipeClient>(instanceName: 'Client')),
-        instanceName: 'RecipeDataSource');
-  }
-
-  //Eager singletons must be registered in the right order
-  g.registerSingleton<DataConnectionChecker>(
-      registerModule.dataConnectionChecker,
-      instanceName: 'DataConnectionChecker');
+  g.registerFactory<DisplayRecipeBloc>(
+      () => DisplayRecipeBloc(
+          g<GetNameSearchRecipeList>(instanceName: 'GetNameSearchRecipeList'),
+          g<GetIngredientSearchRecipeList>(
+              instanceName: 'GetIngredientSearchRecipeList')),
+      instanceName: 'DisplayRecipeBloc');
 }
 
-class _$RegisterModule extends RegisterModule {
-  @override
-  DataConnectionChecker get dataConnectionChecker => DataConnectionChecker();
-}
+class _$RegisterModule extends RegisterModule {}

@@ -1,9 +1,9 @@
-import 'package:receptio_mobile/features/recipes/data/models/ingredient_model.dart';
-import 'package:receptio_mobile/features/recipes/data/models/ingredients_model.dart';
-import 'package:receptio_mobile/features/recipes/data/models/recipe_model.dart';
-import 'package:receptio_mobile/features/recipes/data/models/recipes_model.dart';
-import 'package:receptio_mobile/features/recipes/domain/entities/ingredients.dart';
-import 'package:receptio_mobile/features/recipes/domain/entities/recipe.dart';
+import 'package:receptio/features/api/data/models/ingredient_model.dart';
+import 'package:receptio/features/api/data/models/ingredients_model.dart';
+import 'package:receptio/features/api/data/models/recipe_model.dart';
+import 'package:receptio/features/api/data/models/recipes_model.dart';
+import 'package:receptio/features/api/domain/entities/ingredients.dart';
+import 'package:receptio/features/api/domain/entities/recipe.dart';
 
 RecipeModel getRecipeModel(int id) {
   return _recipeModel(id);
